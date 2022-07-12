@@ -58,7 +58,7 @@ npm install bootstrap@3
   ├── config.py *** Database URLs, CSRF generation, etc
   ├── error.log
   ├── forms.py *** Your forms
-  ├── requirements.txt *** The dependencies we need to install with "pip3 install -r requirements.txt"
+  ├── requirements.txt *** The dependencies we need to install with " "
   ├── static
   │   ├── css 
   │   ├── font

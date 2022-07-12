@@ -1,9 +1,12 @@
 from datetime import datetime
-from flask_wtf import Form
-from wtforms import StringField, SelectField, SelectMultipleField, DateTimeField, BooleanField
+from flask_wtf import FlaskForm
+from wtforms import StringField, SelectField, SelectMultipleField, DateTimeField, BooleanField, SubmitField
 from wtforms.validators import DataRequired, AnyOf, URL
+from enums import Genre, State
+import re
 
-class ShowForm(Form):
+class ShowForm(FlaskForm):
+
     artist_id = StringField(
         'artist_id'
     )
@@ -16,7 +19,30 @@ class ShowForm(Form):
         default= datetime.today()
     )
 
-class VenueForm(Form):
+
+def is_valid_phone(number):
+        regex = re.compile('^[0-9]{3}-[0-9]{3}-[0-9]{4}$')
+        return regex.match(number)
+
+class VenueForm(FlaskForm):
+
+    def validate(self):
+        rv = FlaskForm.validate(self)
+        if not rv:
+            return False
+        if not is_valid_phone(self.phone.data):
+            self.phone.errors.append('Invalid phone.')
+            return False
+        if not set(self.genres.data).issubset(dict(Genre.choices()).keys()):
+            print(dict(Genre.choices()).values()) 
+            self.genres.errors.append('Invalid genres.')
+            return False
+        if self.state.data not in dict(State.choices()).keys():
+            self.state.errors.append('Invalid state.')
+            return False
+        # if pass validation
+        return True
+
     name = StringField(
         'name', validators=[DataRequired()]
     )
@@ -128,7 +154,25 @@ class VenueForm(Form):
 
 
 
-class ArtistForm(Form):
+class ArtistForm(FlaskForm):
+
+    def validate(self):
+        fv = FlaskForm.validate(self)
+        if not fv:
+            return False
+        if not is_valid_phone(self.phone.data):
+            self.phone.errors.append('Invalid phone.')
+            return False
+        if not set(self.genres.data).issubset(dict(Genre.choices()).keys()):
+            print(dict(Genre.choices()).values()) 
+            self.genres.errors.append('Invalid genres.')
+            return False
+        if self.state.data not in dict(State.choices()).keys():
+            self.state.errors.append('Invalid state.')
+            return False
+        # if pass validation
+        return True
+
     name = StringField(
         'name', validators=[DataRequired()]
     )
