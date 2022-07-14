@@ -159,9 +159,7 @@ def show_venue(venue_id):
   past_shows_count = db.session.query(Show).join(Artist).filter(Show.venue_id == venue_id).filter(Show.start_time < datetime.now()).count()
   venue_shows  = db.session.query(Show).join(Venue).filter(Show.venue_id == venue_id).all()
   past_shows = []
-  #past_shows_count = 0
   upcoming_shows = []
-  #upcoming_shows_count = 0
   now = datetime.now()
   for show in venue_shows:
     if show.start_time > now:
@@ -310,17 +308,17 @@ def search_artists():
 def show_artist(artist_id):
   # shows the artist page with the given artist_id
   artist = Artist.query.get(artist_id)
-  #upcoming_shows = db.session.query(Show).join(Venue).filter(Show.artist_id == artist_id).filter(Show.start_time > datetime.now()).all()
+ 
   upcoming_shows_count = db.session.query(Show).join(Venue).filter(Show.artist_id == artist_id).filter(Show.start_time > datetime.now()).count()
-  #past_shows =  db.session.query(Show).join(Venue).filter(Show.artist_id == artist_id).filter(Show.start_time < datetime.now()).all()
+
   past_shows_count = db.session.query(Show).join(Venue).filter(Show.artist_id == artist_id).filter(Show.start_time < datetime.now()).count()
   artist_shows = db.session.query(Show).join(Artist).filter(Show.artist_id == artist_id).all()
   past_shows = []
-  #past_shows_count = 0
+  
   upcoming_shows = []
-  #upcoming_shows_count = 0
+  
   now = datetime.now()
-  # for show in artist.shows:
+  
   for show in artist_shows:  
     if show.start_time > now:
      upcoming_shows.append({
@@ -330,8 +328,7 @@ def show_artist(artist_id):
          "start_time": format_datetime(str(show.start_time))
        })
 
-  #     
-  # past_shows_count += 1
+  
     if show.start_time < now:
      past_shows.append({
        "venue_id" : show.venue_id,
